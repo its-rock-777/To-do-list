@@ -1,0 +1,139 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>To-Do List</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    
+    h1 {
+      text-align: center;
+    }
+    
+    .task-form {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    
+    .task-form input[type="text"] {
+      padding: 5px;
+      font-size: 16px;
+      margin-right: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    
+    .task-form button {
+      padding: 5px 10px;
+      font-size: 16px;
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    .task-list {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    
+    .task-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .task-item.completed {
+      text-decoration: dashed;
+      opacity: 0.7;
+    }
+    
+    .task-item input[type="checkbox"] {
+      margin-right: 10px;
+    }
+    
+    .task-item button {
+      padding: 5px 10px;
+      font-size: 14px;
+      background-color: #b73d35;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>To-Do List</h1>
+  
+  <div class="task-form">
+    <input type="text" id="taskInput" placeholder="Enter a task">
+    <button onclick="addTask()">Add Task</button>
+  </div>
+  
+  <div class="task-list" id="taskList"></div>
+  
+  <script>
+   
+    let tasks = [];
+    
+    function renderTasks() {
+      const taskList = document.getElementById('taskList');
+      taskList.innerHTML = '';
+      
+      tasks.forEach((task, index) => {
+        const taskItem = document.createElement('div');
+        taskItem.className = 'task-item';
+        
+        if (task.completed) {
+          taskItem.classList.add('completed');
+        }
+        
+        taskItem.innerHTML = `
+          <input type="checkbox" onchange="toggleTask(${index})" ${task.completed ? 'checked' : ''}>
+          <span>${task.title}</span>
+          <button onclick="editTask(${index})">Edit</button>
+          <button onclick="deleteTask(${index})">Delete</button>
+        `;
+        
+        taskList.appendChild(taskItem);
+      });
+    }
+    
+    function addTask() {
+      const taskInput = document.getElementById('taskInput');
+      const title = taskInput.value.trim();
+      
+      if (title) {
+        tasks.push({ title, completed: false });
+        renderTasks();
+        taskInput.value = '';
+      }
+    }
+    
+    function editTask(index) {
+      const newTitle = prompt('Enter the new task title:');
+      
+      if (newTitle) {
+        tasks[index].title = newTitle;
+        renderTasks();
+      }
+    }
+    
+    function deleteTask(index) {
+      tasks.splice(index, 1);
+      renderTasks();
+    }
+    
+    function toggleTask(index) {
+      tasks[index].completed = !tasks[index].completed;
+      renderTasks();
+    }
+  </script>
+</body>
+</html>
